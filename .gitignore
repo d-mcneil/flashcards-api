@@ -103,4 +103,4 @@ dist
 # TernJS port file
 .tern-port
 
-./databaseInfo.js
+databaseInfo.js
