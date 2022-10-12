@@ -4,6 +4,7 @@ import knex from 'knex';
 import bcrypt from 'bcryptjs';
 import handleRegister from './controllers/register.js';
 import handleSignIn from './controllers/signIn.js';
+import handleReadDecks from './controllers/readDecks.js';
 
 
 import databaseInfo from './databaseInfo.js';
@@ -48,7 +49,7 @@ app.get("/", (req, res) => res.json("success"));
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
 app.post("/sign-in", (req, res) => {handleSignIn(req, res, db, bcrypt)});
 // app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
-// app.get("/read-decks", (req, res) => {handleReadDecks(req, res, db)});
+app.get("/read-decks/:userId", (req, res) => {handleReadDecks(req, res, db)});
 // app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
 // app.get("/read-cards", (req, res) => {handleReadCards(req, res, db)});
 // app.put("/update-score", (req, res) => {handleUpdateScore(req, res, db)});
