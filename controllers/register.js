@@ -1,9 +1,15 @@
 const handleRegister = (req, res, db, bcrypt) => {
-  const { email, username, password } = req.body;
-  const firstName = req.body.first_name;
-  const lastName = req.body.last_name;
+  const { email, username, password, firstName, lastName } = req.body;
   if (!firstName || !lastName || !email || !username || !password){
-      return res.status(400).json("Incorrect form submission: all fields are required");
+    return res.status(400).json("Incorrect form submission: all fields are required");
+  } else if (firstName.length > 100) {
+    return res.status(400).json("Invalid form submission: first name must be no more than 100 characters long");
+  } else if (lastName.length > 100) {
+    return res.status(400).json("Invalid form submission: last name must be no more than 100 characters long");
+  } else if (email.length > 100) {
+    return res.status(400).json("Invalid form submission: email must be no more than 100 characters long");
+  } else if (username.length > 100) {
+    return res.status(400).json("Invalid form submission: username must be no more than 100 characters long");
   } else if (!email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
     return res.status(400).json("Incorrect form submission: invalid email");
   }
