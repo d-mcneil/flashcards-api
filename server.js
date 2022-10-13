@@ -6,6 +6,7 @@ import handleRegister from './controllers/register.js';
 import handleSignIn from './controllers/signIn.js';
 import handleReadDecks from './controllers/readDecks.js';
 import handleCreateDeck from './controllers/createDeck.js';
+import handleDeleteDeck from './controllers/deleteDeck.js';
 
 
 import databaseInfo from './databaseInfo.js';
@@ -56,7 +57,7 @@ app.get("/read-decks/:userId", (req, res) => {handleReadDecks(req, res, db)});
 // app.put("/update-score", (req, res) => {handleUpdateScore(req, res, db)});
 // app.put("/update-deck", (req, res) => {handleUpdateDeck(req, res, db)});
 // app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
-// app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
+app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
 // app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
 
 
