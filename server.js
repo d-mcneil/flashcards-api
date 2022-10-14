@@ -38,17 +38,10 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 app.use(cors());
 
-// register             post
-// sign in              post
-// create deck          post
-// read decks           get
-// create card          post
-// read cards in deck   get
+
 // update card score    put
 // here im not sure if i should do update score and update term/definition differently for cards
 // update deck          put
-// delete card          delete
-// delete deck          delete
 // delete user          delete
 app.get("/", (req, res) => res.json("success"));
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
