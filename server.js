@@ -10,6 +10,9 @@ import handleDeleteDeck from './controllers/deleteDeck.js';
 import handleReadCards from './controllers/readCards.js';
 import handleDeleteCard from './controllers/deleteCard.js';
 import handleCreateCard from './controllers/createCard.js';
+import handleUpdateDeck from './controllers/updateDeck.js';
+import handleUpdateCard from './controllers/updateCard.js';
+import handleUpdateScore from './controllers/updateScore.js';
 
 
 import databaseInfo from './databaseInfo.js';
@@ -38,11 +41,6 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 app.use(cors());
 
-
-// update card score    put
-// here im not sure if i should do update score and update term/definition differently for cards
-// update deck          put
-// delete user          delete
 app.get("/", (req, res) => res.json("success"));
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
 app.post("/sign-in", (req, res) => {handleSignIn(req, res, db, bcrypt)});
@@ -50,18 +48,12 @@ app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
 app.get("/read-decks/:userId", (req, res) => {handleReadDecks(req, res, db)});
 app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
 app.get("/read-cards/:deckId", (req, res) => {handleReadCards(req, res, db)});
-// app.put("/update-score", (req, res) => {handleUpdateScore(req, res, db)});
-// app.put("/update-deck", (req, res) => {handleUpdateDeck(req, res, db)});
+app.put("/update-card", (req, res) => {handleUpdateCard(req, res, db)});
+app.put("/update-score", (req, res) => {handleUpdateScore(req, res, db)});
+app.put("/update-deck", (req, res) => {handleUpdateDeck(req, res, db)});
 app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
 app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
 // app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
 
-
-
 // app.listen(PORT, () => {console.log(`Flashcards is running on port ${PORT}.`)});
 app.listen(PORT, () => {console.log(`Flashcards is running on port ${PORT}.`)});
-
-
-
-
-

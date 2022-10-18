@@ -6,7 +6,7 @@ const handleCreateCard = (req, res, db) => {
         return res.status(400).json("Invalid submission: term must be no more than 255 characters long");
     } else if (definition.length > 255) {
         return res.status(400).json("Invalid submission: definition must be no more than 255 characters long");
-    }else {
+    } else {
         db('cards').insert({
             term: term,
             definition: definition,
