@@ -11,8 +11,7 @@ import handleReadCards from './controllers/readCards.js';
 import handleDeleteCard from './controllers/deleteCard.js';
 import handleCreateCard from './controllers/createCard.js';
 import {handleUpdateDeckName, handleUpdateDeckDescription, handleUpdateDeckSettings} from './controllers/updateDeck.js';
-import handleUpdateCard from './controllers/updateCard.js';
-import handleUpdateScore from './controllers/updateScore.js';
+import {handleUpdateCardTerm, handleUpdateCardDefinition, handleUpdateCardScore} from './controllers/updateCard.js';
 
 
 import databaseInfo from './databaseInfo.js';
@@ -45,14 +44,15 @@ app.get("/", (req, res) => res.json("success"));
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
 app.post("/sign-in", (req, res) => {handleSignIn(req, res, db, bcrypt)});
 app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
-app.get("/read-decks/:userId", (req, res) => {handleReadDecks(req, res, db)});
 app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
+app.get("/read-decks/:userId", (req, res) => {handleReadDecks(req, res, db)});
 app.get("/read-cards/:deckId", (req, res) => {handleReadCards(req, res, db)});
-app.put("/update-card", (req, res) => {handleUpdateCard(req, res, db)});
-app.put("/update-score", (req, res) => {handleUpdateScore(req, res, db)});
 app.put("/update-deck-name", (req, res) => {handleUpdateDeckName(req, res, db)});
 app.put("/update-deck-description", (req, res) => {handleUpdateDeckDescription(req, res, db)});
 app.put("/update-deck-settings", (req, res) => {handleUpdateDeckSettings(req, res, db)});
+app.put("/update-card-term", (req, res) => {handleUpdateCardTerm(req, res, db)});
+app.put("/update-card-definition", (req, res) => {handleUpdateCardDefinition(req, res, db)});
+app.put("/update-card-score", (req, res) => {handleUpdateCardScore(req, res, db)});
 app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
 app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
 // app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
