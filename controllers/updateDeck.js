@@ -21,8 +21,8 @@ export const handleUpdateDeckDescription = (req, res, db) => {
 };
 
 export const handleUpdateDeckSettings = (req, res, db) => {
-    const { userId, deckId  } = req.body;
-    let { deckPercentage, definitionFirst } = req.body;
+    const { userId, deckId } = req.body;
+    let { deckPercentage, definitionFirst, termLanguage, definitionLanguage } = req.body;
     if (typeof deckPercentage !== 'number'){
         deckPercentage = 100;
     } else if (deckPercentage < 1) {
@@ -35,8 +35,18 @@ export const handleUpdateDeckSettings = (req, res, db) => {
     if (typeof definitionFirst !== 'boolean') {
         definitionFirst = false;
     }
+    if (typeof termLanguage !== 'string'){
+        termLanguage = 'en-US';
+    } else if (termLanguage.length > 32) {
+        termLanguage = 'en-US';
+    }
+    if (typeof definitionLanguage !== 'string'){
+        definitionLanguage = 'en-US';
+    } else if (definitionLanguage.length > 32) {
+        definitionLanguage = 'en-US';
+    }
     db('decks').where({deck_id: deckId}).andWhere({user_id: userId})
-        .update({definition_first: definitionFirst, deck_percentage: deckPercentage})
+        .update({definition_first: definitionFirst, deck_percentage: deckPercentage, term_language:termLanguage, definition_language:definitionLanguage})
         .returning('deck_id').then(deck => res.json(deck[0]))
         .catch(err => res.status(400).json("Unable to save deck settings: 1"));
 };
