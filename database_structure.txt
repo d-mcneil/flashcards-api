@@ -35,7 +35,7 @@ CREATE TABLE decks (
 	definition_language VARCHAR(100) DEFAULT 'Google US English'
 	*************************************************************************************************
 );
-CREATE TABLE decks (deck_id BIGSERIAL PRIMARY KEY, user_id INTEGER REFERENCES users ON DELETE CASCADE, deck_name VARCHAR(100) NOT NULL, description TEXT, deck_created TIMESTAMPTZ NOT NULL, definition_first BOOLEAN DEFAULT FALSE, deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100));
+CREATE TABLE decks (deck_id BIGSERIAL PRIMARY KEY, user_id INTEGER REFERENCES users ON DELETE CASCADE, deck_name VARCHAR(100) NOT NULL, description TEXT, deck_created TIMESTAMPTZ NOT NULL, definition_first BOOLEAN DEFAULT FALSE, deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100), term_language VARCHAR(100) DEFAULT 'Google US English',definition_language VARCHAR(100) DEFAULT 'Google US English');
 
 CREATE TABLE deck_settings (
 	deck_id BIGINT REFERENCES decks ON DELETE CASCADE,

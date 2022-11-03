@@ -15,31 +15,31 @@ import {handleUpdateCard, handleUpdateCardScore} from './controllers/updateCard.
 import handleDeleteUser from './controllers/deleteUser.js';
 
 
-import databaseInfo from './databaseInfo.js';
-const db = knex(databaseInfo);
-// const db = knex(
-//     {
-//       client: "pg",
-//       connection: {
-//         connectionString: process.env.DATABASE_URL,
-//         ssl: {
-//           rejectUnauthorized: false
-//         }
-//       },
-//     }
-// );
+// import databaseInfo from './databaseInfo.js';
+// const db = knex(databaseInfo);
+const db = knex(
+    {
+      client: "pg",
+      connection: {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false
+        }
+      },
+    }
+);
 
 const app = express();
-// const PORT = process.env.PORT;
-const PORT = 3001;
-// const corsOptions = {
-//   origin: process.env.ORIGIN_URL,
-//   optionsSuccessStatus: 200
-// };
+const PORT = process.env.PORT;
+// const PORT = 3001;
+const corsOptions = {
+  origin: process.env.ORIGIN_URL,
+  optionsSuccessStatus: 200
+};
 
 app.use(express.json());
-// app.use(cors(corsOptions));
-app.use(cors());
+app.use(cors(corsOptions));
+// app.use(cors());
 
 app.get("/", (req, res) => res.json("success"));
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
@@ -59,5 +59,4 @@ app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
 app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
 app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
 
-// app.listen(PORT, () => {console.log(`Flashcards is running on port ${PORT}.`)});
 app.listen(PORT, () => {console.log(`Flashcards is running on port ${PORT}.`)});
