@@ -12,6 +12,7 @@ import handleDeleteCard from './controllers/deleteCard.js';
 import handleCreateCard from './controllers/createCard.js';
 import {handleUpdateDeckName, handleUpdateDeckDescription, handleUpdateDeckSettings} from './controllers/updateDeck.js';
 import {handleUpdateCard, handleUpdateCardScore} from './controllers/updateCard.js';
+import handleDeleteUser from './controllers/deleteUser.js';
 
 
 import databaseInfo from './databaseInfo.js';
@@ -56,7 +57,7 @@ app.put("/update-card", (req, res) => {handleUpdateCard(req, res, db)});
 app.put("/update-card-score", (req, res) => {handleUpdateCardScore(req, res, db)});
 app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
 app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
-// app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
+app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
 
 // app.listen(PORT, () => {console.log(`Flashcards is running on port ${PORT}.`)});
 app.listen(PORT, () => {console.log(`Flashcards is running on port ${PORT}.`)});
