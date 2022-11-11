@@ -37,17 +37,17 @@ const handleRegister = (req, res, db, bcrypt) => {
               if (!err) {
                 db.transaction(trx => {
                   trx('users').insert({
-                    firstName: firstName,
-                    lastName: lastName,
-                    username: username,
-                    email: email,
+                    firstName,
+                    lastName,
+                    username,
+                    email,
                     joined: new Date()
                   }).returning('*')
                   .then(user => 
                     trx('login').insert({
                       userId: user[0].userId,
-                      username: username,
-                      hash: hash
+                      username,
+                      hash
                     }).then(() => res.json(user[0]))
                   ).then(trx.commit).catch(trx.rollback);
                 }).catch(err => res.status(400).json("Error registering new user: 1"));

@@ -6,12 +6,12 @@ import bcrypt from 'bcryptjs';
 // post
 import handleRegister from './controllers/register.js';
 import handleSignIn from './controllers/signIn.js';
-// import handleCreateDeck from './controllers/createDeck.js';
+import handleCreateDeck from './controllers/createDeck.js';
 // import handleCreateCard from './controllers/createCard.js';
 
 // // get
-// import handleReadDecks from './controllers/readDecks.js';
-// import handleReadCards from './controllers/readCards.js';
+import handleGetDecks from './controllers/getDecks.js';
+import handleGetCards from './controllers/getCards.js';
 
 // // put
 // import { handleUpdateDeckName, handleUpdateDeckDescription, handleUpdateDeckSettings } from './controllers/updateDeck.js';
@@ -50,11 +50,11 @@ app.get("/", (req, res) => res.json("success"));
 
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
 app.post("/sign-in", (req, res) => {handleSignIn(req, res, db, bcrypt)});
-// app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
+app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
 // app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
 
-// app.get("/decks/:userId", (req, res) => {handleReadDecks(req, res, db)});
-// app.get("/cards/:deckId", (req, res) => {handleReadCards(req, res, db)});
+app.get("/decks/:userId", (req, res) => {handleGetDecks(req, res, db)});
+app.get("/cards/:deckId", (req, res) => {handleGetCards(req, res, db)});
 
 // app.put("/update-deck-name", (req, res) => {handleUpdateDeckName(req, res, db)});
 // app.put("/update-deck-description", (req, res) => {handleUpdateDeckDescription(req, res, db)});
