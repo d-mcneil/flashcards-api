@@ -4,24 +4,20 @@ import knex from 'knex';
 import bcrypt from 'bcryptjs';
 
 // get
-import {handleGetDecks, handleGetCards} from './controllers/get.js';
+import {handleGetDecks, handleGetCards} from './controllers/get.js'; // get
 
 // post
 import handleRegister from './controllers/register.js';
 import handleSignIn from './controllers/signIn.js';
 import handleCreateDeck from './controllers/createDeck.js';
-// import handleCreateCard from './controllers/createCard.js';
+import handleCreateCard from './controllers/createCard.js';
 
 // // put
 // import { handleUpdateDeckName, handleUpdateDeckDescription, handleUpdateDeckSettings } from './controllers/updateDeck.js';
 // import { handleUpdateCard, handleUpdateCardScore } from './controllers/updateCard.js';
 
-// // delete
-import { 
-    // handleDeleteCard, 
-    handleDeleteDeck, 
-    // handleDeleteUser 
-} from './controllers/delete.js'
+// delete
+import { handleDeleteCard, handleDeleteDeck, handleDeleteUser } from './controllers/delete.js'
 
 import databaseInfo from './databaseInfo.js';
 const db = knex(databaseInfo);
@@ -56,9 +52,7 @@ app.get("/cards/:deckId", (req, res) => {handleGetCards(req, res, db)});
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
 app.post("/sign-in", (req, res) => {handleSignIn(req, res, db, bcrypt)});
 app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
-// app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
-
-
+app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
 
 // app.put("/update-deck-name", (req, res) => {handleUpdateDeckName(req, res, db)});
 // app.put("/update-deck-description", (req, res) => {handleUpdateDeckDescription(req, res, db)});
@@ -69,7 +63,7 @@ app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
 // app.put("/update-card-score", (req, res) => {handleUpdateCardScore(req, res, db)});
 
 app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
-// app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
-// app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
+app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
+app.delete("/delete-user", (req, res) => {handleDeleteUser(req, res, db)});
 
 app.listen(PORT, () => {console.log(`Flashcards is running on port ${PORT}.`)});
