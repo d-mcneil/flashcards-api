@@ -23,7 +23,7 @@ export const validateCardInput = (term, definition) => {
     return true;
 }
 
-export default validateRegistrationInput = (firstName, lastName, username, email, password) => {
+export const validateRegistrationInput = (firstName, lastName, username, email, password) => {
     if (!firstName || !lastName || !email || !username || !password){
         res.status(400).json("Incorrect form submission: all fields are required.");
         return false;

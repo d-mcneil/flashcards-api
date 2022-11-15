@@ -20,7 +20,7 @@ export const handleDeleteUser = (req, res, db) => {
 };
 
 // this function could handle deleting cards, decks, and users
-// but, to me, it seems less clear and to be unnecessarily complicating something that's pretty simple
+// but, to me, it seems to be less clear and unnecessarily complicating something that's pretty simple
 //
 // export const handleDelete = (req, res, db) => {
 //     const { databaseName, secondaryColumnName, secondaryColumnValue, userId, returningColumn, cardDeckOrUser } = req.body;
