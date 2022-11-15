@@ -1,17 +1,8 @@
-const validateInput = (deckName) => {
-    if (!deckName) {
-        res.status(400).json("Invalid submission: deck name is required.");
-        return false;
-    } else if (deckName.length > 100) {
-        res.status(400).json("Invalid submission: deck name must be no more than 100 characters long.");
-        return false;
-    }
-    return true;
-}
+import { validateDeckName } from "./validateInput.js";
 
 const handleCreateDeck = (req, res, db) => {
     const { userId, deckName, description } = req.body;
-    const valid = validateInput(deckName);
+    const valid = validateDeckName(deckName);
     if (!valid) {
         return;
     }

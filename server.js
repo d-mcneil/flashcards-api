@@ -5,17 +5,16 @@ import bcrypt from 'bcryptjs';
 
 // get
 import {handleGetDecks, handleGetCards} from './controllers/get.js'; // get
-
 // post
 import handleRegister from './controllers/register.js';
 import handleSignIn from './controllers/signIn.js';
 import handleCreateDeck from './controllers/createDeck.js';
 import handleCreateCard from './controllers/createCard.js';
-
-// // put
-// import { handleUpdateDeckName, handleUpdateDeckDescription, handleUpdateDeckSettings } from './controllers/updateDeck.js';
-// import { handleUpdateCard, handleUpdateCardScore } from './controllers/updateCard.js';
-
+// put
+import { handleUpdateDeck } from './controllers/updateDeck.js';
+import { handleUpdateCard } from './controllers/updateCard.js';
+// import { handleUpdateDeckSettings } from './controllers/updateDeck.js';
+// import { handleUpdateCardScore } from './controllers/updateCard.js';
 // delete
 import { handleDeleteCard, handleDeleteDeck, handleDeleteUser } from './controllers/delete.js'
 
@@ -54,12 +53,9 @@ app.post("/sign-in", (req, res) => {handleSignIn(req, res, db, bcrypt)});
 app.post("/create-deck", (req, res) => {handleCreateDeck(req, res, db)});
 app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
 
-// app.put("/update-deck-name", (req, res) => {handleUpdateDeckName(req, res, db)});
-// app.put("/update-deck-description", (req, res) => {handleUpdateDeckDescription(req, res, db)});
+app.put("/update-deck", (req, res) => {handleUpdateDeck(req, res, db)});
+app.put("/update-card", (req, res) => {handleUpdateCard(req, res, db)});
 // app.put("/update-deck-settings", (req, res) => {handleUpdateDeckSettings(req, res, db)});
-// app.put("/update-card", (req, res) => {handleUpdateCard(req, res, db)});
-// // app.put("/update-card-term", (req, res) => {handleUpdateCardTerm(req, res, db)});
-// // app.put("/update-card-definition", (req, res) => {handleUpdateCardDefinition(req, res, db)});
 // app.put("/update-card-score", (req, res) => {handleUpdateCardScore(req, res, db)});
 
 app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
