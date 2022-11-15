@@ -1,17 +1,8 @@
-const validateInput = (username, password) => {
-    if (!username || !password){
-        res.status(400).json("Incorrect form submission: all fields are required.");
-        return false;
-    } else if (username.length > 100) {
-        res.status(400).json("Invalid combination of username and password");
-        return false;
-    }
-    return true;
-}
+import { validateSignInInput } from "./validateInput.js";
 
 const handleSignIn = (req, res, db, bcrypt) => {
     const { username, password } = req.body;
-    const valid = validateInput(username, password);
+    const valid = validateSignInInput(username, password);
     if (!valid) {
         return;
     }

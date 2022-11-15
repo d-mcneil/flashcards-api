@@ -1,29 +1,8 @@
-const validateInput = (firstName, lastName, username, email, password) => {
-    if (!firstName || !lastName || !email || !username || !password){
-        res.status(400).json("Incorrect form submission: all fields are required.");
-        return false;
-    } else if (firstName.length > 100) {
-        res.status(400).json("Invalid form submission: first name must be no more than 100 characters long.");
-        return false;
-    } else if (lastName.length > 100) {
-        res.status(400).json("Invalid form submission: last name must be no more than 100 characters long.");
-        return false;
-    } else if (email.length > 100) {
-        res.status(400).json("Invalid form submission: email must be no more than 100 characters long.");
-        return false;
-    } else if (username.length > 100) {
-        res.status(400).json("Invalid form submission: username must be no more than 100 characters long.");
-        return false;
-    } else if (!email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
-        res.status(400).json("Invalid form submission: email is not valid.");
-        return false;
-    }
-    return true;
-}
+import { validateRegistrationInput } from "./validateInput.js";
 
 const handleRegister = (req, res, db, bcrypt) => {
     const { firstName, lastName, username, email, password } = req.body;
-    const valid = validateInput(firstName, lastName, username, email, password);
+    const valid = validateRegistrationInput(firstName, lastName, username, email, password);
     if (!valid) {
         return;
     }

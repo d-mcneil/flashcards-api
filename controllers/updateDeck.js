@@ -1,11 +1,11 @@
-import { validateDeckName } from "./validateInput.js";
+import { validateDeckInput } from "./validateInput.js";
 
 export const handleUpdateDeck = (req, res, db) => {
     const { userId, secondaryId, primaryColumn, secondaryColumn } = req.body;
     const deckId = secondaryId;
     const deckName = primaryColumn;
     const description = secondaryColumn;
-    const valid = validateDeckName(deckName);
+    const valid = validateDeckInput(deckName);
     if (!valid) {
         return;
     }

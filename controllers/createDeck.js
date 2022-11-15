@@ -1,8 +1,8 @@
-import { validateDeckName } from "./validateInput.js";
+import { validateDeckInput } from "./validateInput.js";
 
 const handleCreateDeck = (req, res, db) => {
     const { userId, deckName, description } = req.body;
-    const valid = validateDeckName(deckName);
+    const valid = validateDeckInput(deckName);
     if (!valid) {
         return;
     }
