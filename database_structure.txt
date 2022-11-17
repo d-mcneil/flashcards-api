@@ -29,19 +29,25 @@ CREATE TABLE decks (
 );
 CREATE TABLE decks ("deckId" BIGSERIAL PRIMARY KEY, "userId" INTEGER REFERENCES users ON DELETE CASCADE, "deckName" VARCHAR(100) NOT NULL, description TEXT, "deckCreated" TIMESTAMPTZ NOT NULL);
 
+
+
 CREATE TABLE deck_settings (
-	deck_id BIGINT REFERENCES decks ON DELETE CASCADE,
-	user_id INTEGER REFERENCES users ON DELETE CASCADE,
-	definition_first BOOLEAN DEFAULT FALSE,
-	deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100),
-	term_language_code CHAR(5) DEFAULT 'en-US',
-	term_language_name VARCHAR(100) DEFAULT 'Google US English',
-	definition_language_code CHAR(5) DEFAULT 'en-US',
-	definition_language_name DEFAULT 'Google US English'
-	(my idea is to be able to use the same language code to set the language across browsers; if the language name isnt present, then use the language code, if that isnt present either, then default to us english )
-	(will probably include as well something that has to do with reading on card flip)
+	"deckId" BIGINT REFERENCES decks ON DELETE CASCADE,
+	"userId" INTEGER REFERENCES users ON DELETE CASCADE,
+	"definitionFirst" BOOLEAN DEFAULT FALSE,
+	"practiceDeckPercentage" SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100),
+	"termLanguageCode" CHAR(5) DEFAULT 'en-US',
+	"termLanguageName" VARCHAR(100) DEFAULT 'Google US English',
+	"definitionLanguageCode" CHAR(5) DEFAULT 'en-US',
+	"definitionLanguageName" VARCHAR(100) DEFAULT 'Google US English',
+	"readOutOnFlip" BOOLEAN DEFAULT FALSE
 )
-CREATE TABLE deck_settings (deck_id BIGINT REFERENCES decks ON DELETE CASCADE, user_id INTEGER REFERENCES users ON DELETE CASCADE, definition_first BOOLEAN DEFAULT FALSE, deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100), term_language_code CHAR(5) DEFAULT 'en-US', term_language_name VARCHAR(100) DEFAULT 'Google US English', definition_language_code CHAR(5) DEFAULT 'en-US', definition_language_name DEFAULT 'Google US English'
+CREATE TABLE deck_settings ("deckId" BIGINT REFERENCES decks ON DELETE CASCADE, "userId" INTEGER REFERENCES users ON DELETE CASCADE, "definitionFirst" BOOLEAN DEFAULT FALSE, "practiceDeckPercentage" SMALLINT DEFAULT 100 CHECK ("practiceDeckPercentage" >= 1 AND "practiceDeckPercentage" <= 100), "termLanguageCode" CHAR(5) DEFAULT 'en-US', "termLanguageName" VARCHAR(100) DEFAULT 'Google US English', "definitionLanguageCode" CHAR(5) DEFAULT 'en-US', "definitionLanguageName" VARCHAR(100) DEFAULT 'Google US English', "readOutOnFlip" BOOLEAN DEFAULT FALSE);
+//
+// My idea is to be able to use the same language code to set the language across browsers. 
+// If the language name isn't present, then use the language code. 
+// If the language code isn't present either, then default to US English
+
 
 
 CREATE TABLE cards (

@@ -1,4 +1,4 @@
-import { validateDeckInput } from "./validateInput.js";
+import { validateDeckInput, validateDeckSettings } from "./validateInput.js";
 
 export const handleUpdateDeck = (req, res, db) => {
     const { userId, secondaryId, primaryColumn, secondaryColumn } = req.body;
@@ -13,4 +13,31 @@ export const handleUpdateDeck = (req, res, db) => {
         .update({deckName, description})
         .returning('deckId').then(deckId => res.json(deckId[0]))
         .catch(err => res.status(400).json("Error updating deck: 1"));
+}
+
+export const handleUpdateDeckSettings = (req, res, db) => {
+    const { userId, deckId } = req.body;
+    const validatedSettings = validateDeckSettings(req.body)
+    const { 
+        definitionFirst, 
+        practiceDeckPercentage, 
+        termLanguageCode, 
+        termLanguageName, 
+        definitionLanguageCode, 
+        definitionLanguageName, 
+        readOutOnFlip
+    } = validatedSettings;
+
+    db('deck_settings').where({deckId}).andWhere({userId})
+    .update({
+        definitionFirst, 
+        practiceDeckPercentage, 
+        termLanguageCode, 
+        termLanguageName, 
+        definitionLanguageCode, 
+        definitionLanguageName, 
+        readOutOnFlip
+    })
+    .returning('deckId').then(deck => res.json(deck[0]))
+    .catch(err => res.status(400).json("Error saving deck settings: 1"));
 }

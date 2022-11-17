@@ -1,3 +1,5 @@
+import { request } from "express";
+
 export const validateDeckInput = (deckName) => {
     if (!deckName) {
         res.status(400).json("Invalid submission: deck name is required.");
@@ -55,4 +57,60 @@ export const validateSignInInput = (username, password) => {
         return false;
     }
     return true;
+}
+
+export const validateDeckSettings = (requestBody) => {
+    const validateBoolean = (userInput) => {
+        if (typeof userInput !== 'boolean') {
+            return false;
+        }
+        return userInput;
+    };
+
+    const validatePracticeDeckPercentage = (userInput) => {
+        if (typeof userInput !== 'number'){
+            return 100;
+        } else if (userInput < 1) {
+            return 1;
+        } else if (userInput > 100) {
+            return 100;
+        }
+        return Math.round(userInput);
+    };
+
+    const validateLanguageCode = (userInput) => {
+        if (typeof userInput !== 'string'){
+            return 'en-US';
+        } else if (userInput.length !== 5) {
+            return 'en-US';
+        }
+        return userInput;
+    };
+    
+    const validateLanguageName = (userInput) => {
+        if (typeof userInput !== 'string'){
+            return "Google US English";
+        } else if (userInput.length > 100) {
+            return "Google US English";
+        }
+        return userInput;
+    };
+    
+    const definitionFirst = validateBoolean(requestBody.definitionFirst);
+    const practiceDeckPercentage = validatePracticeDeckPercentage(requestBody.practiceDeckPercentage);
+    const termLanguageCode = validateLanguageCode(requestBody.termLanguageCode);
+    const termLanguageName = validateLanguageName(requestBody.termLanguageName);
+    const definitionLanguageCode = validateLanguageCode(requestBody.definitionLanguageCode);
+    const definitionLanguageName = validateLanguageName(requestBody.definitionLanguageName);
+    const readOutOnFlip = validateBoolean(requestBody.readOutOnFlip);
+
+    return {
+        definitionFirst, 
+        practiceDeckPercentage, 
+        termLanguageCode, 
+        termLanguageName, 
+        definitionLanguageCode, 
+        definitionLanguageName, 
+        readOutOnFlip
+    };
 }
