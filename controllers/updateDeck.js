@@ -39,5 +39,5 @@ export const handleUpdateDeckSettings = (req, res, db) => {
         readOutOnFlip
     })
     .returning('deckId').then(deck => res.json(deck[0]))
-    .catch(err => res.status(400).json("Error saving deck settings: 1"));
+    .catch(err => res.status(400).json("Error saving updated deck settings: 1"));
 }
