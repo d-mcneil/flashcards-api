@@ -12,9 +12,8 @@ import handleCreateDeck from './controllers/createDeck.js';
 import handleCreateCard from './controllers/createCard.js';
 // put
 import { handleUpdateDeck } from './controllers/updateDeck.js';
-import { handleUpdateCard } from './controllers/updateCard.js';
+import { handleUpdateCard, handleUpdateCardScore } from './controllers/updateCard.js';
 // import { handleUpdateDeckSettings } from './controllers/updateDeck.js';
-// import { handleUpdateCardScore } from './controllers/updateCard.js';
 // delete
 import { handleDeleteCard, handleDeleteDeck, handleDeleteUser } from './controllers/delete.js'
 
@@ -56,7 +55,7 @@ app.post("/create-card", (req, res) => {handleCreateCard(req, res, db)});
 app.put("/update-deck", (req, res) => {handleUpdateDeck(req, res, db)});
 app.put("/update-card", (req, res) => {handleUpdateCard(req, res, db)});
 // app.put("/update-deck-settings", (req, res) => {handleUpdateDeckSettings(req, res, db)});
-// app.put("/update-card-score", (req, res) => {handleUpdateCardScore(req, res, db)});
+app.put("/update-card-score", (req, res) => {handleUpdateCardScore(req, res, db)});
 
 app.delete("/delete-deck", (req, res) => {handleDeleteDeck(req, res, db)});
 app.delete("/delete-card", (req, res) => {handleDeleteCard(req, res, db)});
