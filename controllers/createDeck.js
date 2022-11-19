@@ -23,7 +23,7 @@ const handleCreateDeck = (req, res, db) => {
             .then(deck => 
                 trx('deck_settings').insert({
                     userId,
-                    deckId: deck.deckId
+                    deckId: deck[0].deckId
                 }).then(() => res.json(deck[0]))
             ).then(trx.commit).catch(trx.rollback);
     })

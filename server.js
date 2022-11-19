@@ -4,7 +4,7 @@ import knex from 'knex';
 import bcrypt from 'bcryptjs';
 
 // get
-import {handleGetDecks, handleGetCards} from './controllers/get.js'; // get
+import {handleGetDecks, handleGetCards, handleGetDeckPracticeSettings} from './controllers/get.js'; // get
 // post
 import handleRegister from './controllers/register.js';
 import handleSignIn from './controllers/signIn.js';
@@ -45,6 +45,7 @@ app.use(cors());
 app.get("/", (req, res) => res.json("success"));
 app.get("/decks/:userId", (req, res) => {handleGetDecks(req, res, db)});
 app.get("/cards/:deckId", (req, res) => {handleGetCards(req, res, db)});
+app.get("/practice-settings/:deckId", (req, res) => {handleGetDeckPracticeSettings(req, res, db)});
 
 app.post("/register", (req, res) => {handleRegister(req, res, db, bcrypt)});
 app.post("/sign-in", (req, res) => {handleSignIn(req, res, db, bcrypt)});

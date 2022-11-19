@@ -1,5 +1,3 @@
-import { request } from "express";
-
 export const validateDeckInput = (deckName) => {
     if (!deckName) {
         res.status(400).json("Invalid submission: deck name is required.");
