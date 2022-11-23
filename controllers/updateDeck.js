@@ -38,6 +38,15 @@ export const handleUpdateDeckSettings = (req, res, db) => {
         definitionLanguageName, 
         readOutOnFlip
     })
-    .returning('deckId').then(deck => res.json(deck[0]))
+    .returning([
+        "deckId",
+	    "definitionFirst",
+	    "practiceDeckPercentage",
+	    "termLanguageCode",
+	    "termLanguageName",
+	    "definitionLanguageCode" ,
+	    "definitionLanguageName" ,
+	    "readOutOnFlip"
+    ]).then(settings => res.json(settings[0]))
     .catch(err => res.status(400).json("Error saving updated deck settings: 1"));
 }
