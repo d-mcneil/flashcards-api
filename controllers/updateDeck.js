@@ -1,52 +1,52 @@
-export const handleUpdateDeckName = (req, res, db) => {
-    const { userId, deckId, deckName } = req.body;
-    if (!deckName) {
-        return res.status(400).json("Invalid submission: deck name is required");
-    } else if (deckName.length > 100) {
-        return res.status(400).json("Invalid submission: deck name must be no more than 100 characters long");
-    } else {
-        db('decks').where({deck_id: deckId}).andWhere({user_id: userId})
-            .update({deck_name: deckName})
-            .returning('deck_id').then(deck => res.json(deck[0]))
-            .catch(err => res.status(400).json("Unable to update deck name: 1"));
-    }
-};
+import { validateDeckInput, validateDeckSettings } from "./validateInput.js";
 
-export const handleUpdateDeckDescription = (req, res, db) => {
-    const { userId, deckId, description } = req.body;
-    db('decks').where({deck_id: deckId}).andWhere({user_id: userId})
-        .update({description})
-        .returning('deck_id').then(deck => res.json(deck[0]))
-        .catch(err => res.status(400).json("Unable to update deck description: 1"));
-};
+export const handleUpdateDeck = (req, res, db) => {
+    const { userId, secondaryId, primaryColumn, secondaryColumn } = req.body;
+    const deckId = secondaryId;
+    const deckName = primaryColumn;
+    const description = secondaryColumn;
+    const valid = validateDeckInput(deckName);
+    if (!valid) {
+        return;
+    }
+    db('decks').where({deckId}).andWhere({userId})
+        .update({deckName, description})
+        .returning('deckId').then(deckId => res.json(deckId[0]))
+        .catch(err => res.status(400).json("Error updating deck: 1"));
+}
 
 export const handleUpdateDeckSettings = (req, res, db) => {
     const { userId, deckId } = req.body;
-    let { deckPercentage, definitionFirst, termLanguage, definitionLanguage } = req.body;
-    if (typeof deckPercentage !== 'number'){
-        deckPercentage = 100;
-    } else if (deckPercentage < 1) {
-        deckPercentage = 1;
-    } else if (deckPercentage > 100) {
-        deckPercentage = 100;
-    } else {
-        deckPercentage = Math.round(deckPercentage);
-    }
-    if (typeof definitionFirst !== 'boolean') {
-        definitionFirst = false;
-    }
-    if (typeof termLanguage !== 'string'){
-        termLanguage = 'en-US';
-    } else if (termLanguage.length > 32) {
-        termLanguage = 'en-US';
-    }
-    if (typeof definitionLanguage !== 'string'){
-        definitionLanguage = 'en-US';
-    } else if (definitionLanguage.length > 32) {
-        definitionLanguage = 'en-US';
-    }
-    db('decks').where({deck_id: deckId}).andWhere({user_id: userId})
-        .update({definition_first: definitionFirst, deck_percentage: deckPercentage, term_language:termLanguage, definition_language:definitionLanguage})
-        .returning('deck_id').then(deck => res.json(deck[0]))
-        .catch(err => res.status(400).json("Unable to save deck settings: 1"));
-};
+    const validatedSettings = validateDeckSettings(req.body)
+    const { 
+        definitionFirst, 
+        practiceDeckPercentage, 
+        termLanguageCode, 
+        termLanguageName, 
+        definitionLanguageCode, 
+        definitionLanguageName, 
+        readOutOnFlip
+    } = validatedSettings;
+
+    db('deck_settings').where({deckId}).andWhere({userId})
+    .update({
+        definitionFirst, 
+        practiceDeckPercentage, 
+        termLanguageCode, 
+        termLanguageName, 
+        definitionLanguageCode, 
+        definitionLanguageName, 
+        readOutOnFlip
+    })
+    .returning([
+        "deckId",
+	    "definitionFirst",
+	    "practiceDeckPercentage",
+	    "termLanguageCode",
+	    "termLanguageName",
+	    "definitionLanguageCode" ,
+	    "definitionLanguageName" ,
+	    "readOutOnFlip"
+    ]).then(settings => res.json(settings[0]))
+    .catch(err => res.status(400).json("Error saving updated deck settings: 1"));
+}

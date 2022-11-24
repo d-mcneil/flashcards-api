@@ -1,18 +1,34 @@
+import { validateDeckInput } from "./validateInput.js";
+
 const handleCreateDeck = (req, res, db) => {
     const { userId, deckName, description } = req.body;
-    if (!deckName) {
-        return res.status(400).json("Invalid submission: deck name is required");
-    } else if (deckName.length > 100) {
-        return res.status(400).json("Invalid submission: deck name must be no more than 100 characters long");
-    } else {
-        db('decks').insert({
-            deck_name: deckName,
-            description: description,
-            user_id: userId,
-            deck_created: new Date()
-        }).returning('*').then(deck => res.json(deck[0]))
-        .catch(err => res.status(400).json("Unable to create new deck: 1"));
+    const valid = validateDeckInput(deckName);
+    if (!valid) {
+        return;
     }
+    // db('decks').insert({
+    //     deckName,
+    //     description,
+    //     userId,
+    //     deckCreated: new Date()
+    // }).returning(['deckId', 'userId', 'deckName', 'description']).then(deck => res.json(deck[0]))
+    
+    db.transaction(trx => {
+        trx('decks').insert({
+            deckName,
+            description,
+            userId,
+            deckCreated: new Date()
+        }).returning(['deckId', 'userId', 'deckName', 'description'])
+            .then(deck => 
+                trx('deck_settings').insert({
+                    userId,
+                    deckId: deck[0].deckId
+                }).then(() => res.json(deck[0]))
+            ).then(trx.commit).catch(trx.rollback);
+    })
+    
+    .catch(err => res.status(400).json("Error saving new deck: 1"));
 };
 
 export default handleCreateDeck;

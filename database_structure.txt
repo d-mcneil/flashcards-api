@@ -1,64 +1,62 @@
 CREATE TABLE users ( 
-	user_id SERIAL PRIMARY KEY,
+	"userId" SERIAL PRIMARY KEY,
 	username VARCHAR(100) UNIQUE NOT NULL, 
-	first_name VARCHAR(100) NOT NULL, 
-	last_name VARCHAR(100) NOT NULL, 
+	"firstName" VARCHAR(100) NOT NULL, 
+	"lastName" VARCHAR(100) NOT NULL, 
 	email VARCHAR(100) NOT NULL, 
 	joined TIMESTAMPTZ NOT NULL,
 );
-CREATE TABLE users (user_id SERIAL PRIMARY KEY, username VARCHAR(100) UNIQUE NOT NULL, first_name VARCHAR(100) NOT NULL, last_name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, joined TIMESTAMPTZ NOT NULL);
+CREATE TABLE users ("userId" SERIAL PRIMARY KEY, username VARCHAR(100) UNIQUE NOT NULL, "firstName" VARCHAR(100) NOT NULL, "lastName" VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, joined TIMESTAMPTZ NOT NULL);
 
 
 
 CREATE TABLE login (
-	user_id INTEGER REFERENCES users ON DELETE CASCADE;
+	"userId" INTEGER REFERENCES users ON DELETE CASCADE;
 	username VARCHAR(100) UNIQUE REFERENCES users (username), 
 	hash CHAR(60) NOT NULL, 
-	email VARCHAR(100) NOT NULL,
-	PRIMARY KEY (user_id)
+	PRIMARY KEY ("userId")
 );
-CREATE TABLE login (user_id INTEGER REFERENCES users ON DELETE CASCADE, username VARCHAR(100) UNIQUE REFERENCES users (username), hash CHAR(60) NOT NULL, email VARCHAR(100) NOT NULL, PRIMARY KEY (user_id));
+CREATE TABLE login ("userId" INTEGER REFERENCES users ON DELETE CASCADE, username VARCHAR(100) UNIQUE REFERENCES users (username), hash CHAR(60) NOT NULL, PRIMARY KEY ("userId"));
 
 
 
 CREATE TABLE decks (
-	deck_id BIGSERIAL PRIMARY KEY,
-	user_id INTEGER REFERENCES users ON DELETE CASCADE,
-	deck_name VARCHAR(100) NOT NULL,
+	"deckId" BIGSERIAL PRIMARY KEY,
+	"userId" INTEGER REFERENCES users ON DELETE CASCADE,
+	"deckName" VARCHAR(100) NOT NULL,
 	description TEXT,
-	deck_created TIMESTAMPTZ NOT NULL,
-	*************************************************************************************************
-	(whats between the asterisks is in the current decks table, but will be moved to another table for the next version)
-	definition_first BOOLEAN DEFAULT FALSE,
-	deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100),
-	term_language VARCHAR(100) DEFAULT 'Google US English',
-	definition_language VARCHAR(100) DEFAULT 'Google US English'
-	*************************************************************************************************
+	"deckCreated" TIMESTAMPTZ NOT NULL,
 );
-CREATE TABLE decks (deck_id BIGSERIAL PRIMARY KEY, user_id INTEGER REFERENCES users ON DELETE CASCADE, deck_name VARCHAR(100) NOT NULL, description TEXT, deck_created TIMESTAMPTZ NOT NULL, definition_first BOOLEAN DEFAULT FALSE, deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100), term_language VARCHAR(100) DEFAULT 'Google US English',definition_language VARCHAR(100) DEFAULT 'Google US English');
+CREATE TABLE decks ("deckId" BIGSERIAL PRIMARY KEY, "userId" INTEGER REFERENCES users ON DELETE CASCADE, "deckName" VARCHAR(100) NOT NULL, description TEXT, "deckCreated" TIMESTAMPTZ NOT NULL);
+
+
 
 CREATE TABLE deck_settings (
-	deck_id BIGINT REFERENCES decks ON DELETE CASCADE,
-	user_id INTEGER REFERENCES users ON DELETE CASCADE,
-	definition_first BOOLEAN DEFAULT FALSE,
-	deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100),
-	term_language_code CHAR(5) DEFAULT 'en-US',
-	term_language_name VARCHAR(100) DEFAULT 'Google US English',
-	definition_language_code CHAR(5) DEFAULT 'en-US',
-	definition_language_name DEFAULT 'Google US English'
-	(my idea is to be able to use the same language code to set the language across browsers; if the language name isnt present, then use the language code, if that isnt present either, then default to us english )
-	(will probably include as well something that has to do with reading on card flip)
+	"deckId" BIGINT REFERENCES decks ON DELETE CASCADE,
+	"userId" INTEGER REFERENCES users ON DELETE CASCADE,
+	"definitionFirst" BOOLEAN DEFAULT FALSE,
+	"practiceDeckPercentage" SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100),
+	"termLanguageCode" CHAR(5) DEFAULT 'en-US',
+	"termLanguageName" VARCHAR(100) DEFAULT 'Google US English',
+	"definitionLanguageCode" CHAR(5) DEFAULT 'en-US',
+	"definitionLanguageName" VARCHAR(100) DEFAULT 'Google US English',
+	"readOutOnFlip" BOOLEAN DEFAULT FALSE
 )
-CREATE TABLE deck_settings (deck_id BIGINT REFERENCES decks ON DELETE CASCADE, user_id INTEGER REFERENCES users ON DELETE CASCADE, definition_first BOOLEAN DEFAULT FALSE, deck_percentage SMALLINT DEFAULT 100 CHECK (deck_percentage >= 1 AND deck_percentage <= 100), term_language_code CHAR(5) DEFAULT 'en-US', term_language_name VARCHAR(100) DEFAULT 'Google US English', definition_language_code CHAR(5) DEFAULT 'en-US', definition_language_name DEFAULT 'Google US English'
+CREATE TABLE deck_settings ("deckId" BIGINT REFERENCES decks ON DELETE CASCADE, "userId" INTEGER REFERENCES users ON DELETE CASCADE, "definitionFirst" BOOLEAN DEFAULT FALSE, "practiceDeckPercentage" SMALLINT DEFAULT 100 CHECK ("practiceDeckPercentage" >= 1 AND "practiceDeckPercentage" <= 100), "termLanguageCode" CHAR(5) DEFAULT 'en-US', "termLanguageName" VARCHAR(100) DEFAULT 'Google US English', "definitionLanguageCode" CHAR(5) DEFAULT 'en-US', "definitionLanguageName" VARCHAR(100) DEFAULT 'Google US English', "readOutOnFlip" BOOLEAN DEFAULT FALSE);
+//
+// My idea is to be able to use the same language code to set the language across browsers. 
+// If the language name isn't present, then use the language code. 
+// If the language code isn't present either, then default to US English
+
 
 
 CREATE TABLE cards (
-	card_id BIGSERIAL PRIMARY KEY,
-	deck_id BIGINT REFERENCES decks ON DELETE CASCADE,
-	user_id INTEGER REFERENCES users ON DELETE CASCADE,
+	"cardId" BIGSERIAL PRIMARY KEY,
+	"deckId" BIGINT REFERENCES decks ON DELETE CASCADE,
+	"userId" INTEGER REFERENCES users ON DELETE CASCADE,
 	term VARCHAR(255),
 	definition VARCHAR(255),
-	card_created TIMESTAMPTZ NOT NULL,
+	"cardCreated" TIMESTAMPTZ NOT NULL,
 	score INTEGER NOT NULL DEFAULT 0
 );
-CREATE TABLE cards (card_id BIGSERIAL PRIMARY KEY, deck_id BIGINT REFERENCES decks ON DELETE CASCADE, user_id INTEGER REFERENCES users ON DELETE CASCADE, term VARCHAR(255), definition VARCHAR(255), card_created TIMESTAMPTZ NOT NULL, score INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE cards ("cardId" BIGSERIAL PRIMARY KEY, "deckId" BIGINT REFERENCES decks ON DELETE CASCADE, "userId" INTEGER REFERENCES users ON DELETE CASCADE, term VARCHAR(255), definition VARCHAR(255), "cardCreated" TIMESTAMPTZ NOT NULL, score INTEGER NOT NULL DEFAULT 0);

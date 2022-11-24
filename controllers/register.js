@@ -1,52 +1,46 @@
-const handleRegister = (req, res, db, bcrypt) => {
-  const { email, username, password, firstName, lastName } = req.body;
-  if (!firstName || !lastName || !email || !username || !password){
-    return res.status(400).json("Incorrect form submission: all fields are required");
-  } else if (firstName.length > 100) {
-    return res.status(400).json("Invalid form submission: first name must be no more than 100 characters long");
-  } else if (lastName.length > 100) {
-    return res.status(400).json("Invalid form submission: last name must be no more than 100 characters long");
-  } else if (email.length > 100) {
-    return res.status(400).json("Invalid form submission: email must be no more than 100 characters long");
-  } else if (username.length > 100) {
-    return res.status(400).json("Invalid form submission: username must be no more than 100 characters long");
-  } else if (!email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
-    return res.status(400).json("Incorrect form submission: invalid email");
-  }
-  db.select('username').from('users').where({username}).then(array => {
-    if (array.length) {
-      return res.status(400).json("Username is already being used; select another username.");
-    } else {
-      bcrypt.genSalt(10, function(err, salt) {
-        if (!err) {
-          bcrypt.hash(password, salt, function(err, hash) {
-            if (!err) {
-              db.transaction(trx => {
-                trx('users').insert({
-                  first_name: firstName,
-                  last_name: lastName,
-                  username: username,
-                  email: email,
-                  joined: new Date()
-                }).returning('*').then(user => 
-                  trx('login').insert({
-                    user_id: user[0].user_id,
-                    username: username,
-                    email: email,
-                    hash: hash
-                  }).then(() => res.json(user[0]))
-                ).then(trx.commit).catch(trx.rollback);
-              }).catch(err => res.status(400).json("Unable to register new user: 1"));
-            } else {
-              res.status(400).json("Unable to register new user: 2");
-            }
-          });
-        } else {
-          res.status(400).json("Unable to register new user: 3")
-        }
-      });
-    }
-  }).catch(err => res.status(400).json("Unable to register new user: 4"));  
-};
+import { validateRegistrationInput } from "./validateInput.js";
 
-export default handleRegister;
+const handleRegister = (req, res, db, bcrypt) => {
+    const { firstName, lastName, username, email, password } = req.body;
+    const valid = validateRegistrationInput(firstName, lastName, username, email, password);
+    if (!valid) {
+        return;
+    }
+    db.select('username').from('users').where({username}).then(array => {
+      if (array.length) {
+        return res.status(400).json("Username is already being used; select another username.");
+      } else {
+        bcrypt.genSalt(10, function(err, salt) {
+          if (!err) {
+            bcrypt.hash(password, salt, function(err, hash) {
+              if (!err) {
+                db.transaction(trx => {
+                  trx('users').insert({
+                    firstName,
+                    lastName,
+                    username,
+                    email,
+                    joined: new Date()
+                  }).returning('*')
+                  .then(user => 
+                    trx('login').insert({
+                      userId: user[0].userId,
+                      username,
+                      hash
+                    }).then(() => res.json(user[0]))
+                  ).then(trx.commit).catch(trx.rollback);
+                }).catch(err => res.status(400).json("Error registering new user: 1"));
+              } else {
+                res.status(400).json("Error registering new user: 2");
+              }
+            });
+          } else {
+            res.status(400).json("Error registering new user: 3")
+          }
+        });
+      }
+    }).catch(err => res.status(400).json("Error registering new user: 4"));  
+  };
+  
+  export default handleRegister;
+  

@@ -1,10 +1,11 @@
+import { validateSignInInput } from "./validateInput.js";
+
 const handleSignIn = (req, res, db, bcrypt) => {
     const { username, password } = req.body;
-    if (!username || !password){
-        return res.status(400).json("Incorrect form submission: all fields required")
-    } else if (username.length > 100) {
-        return res.status(400).json("Invalid combination of username and password");
-      }
+    const valid = validateSignInInput(username, password);
+    if (!valid) {
+        return;
+    }
     db.select('hash').from('login').where({username})
         .then(data => {
         if (data.length){
@@ -15,11 +16,11 @@ const handleSignIn = (req, res, db, bcrypt) => {
         }).then(isValidPassword => {
             if (isValidPassword) {
                 db.select('*').from('users').where({username}).then(user => res.json(user[0]))
-                .catch(err => res.status(400).json('Error logging in user: 1'));
+                .catch(err => res.status(400).json('Error signing in user: 1'));
             } else {
                 res.status(400).json("Invalid combination of username and password");
             }
-        }).catch(err => res.status(400).json("Error logging in user: 2"));   
+        }).catch(err => res.status(400).json("Error signing in user: 2"));   
 };
 
 export default handleSignIn;
