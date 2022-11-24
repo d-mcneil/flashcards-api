@@ -4,7 +4,7 @@ import knex from 'knex';
 import bcrypt from 'bcryptjs';
 
 // get
-import {handleGetDecks, handleGetCards, handleGetDeckPracticeSettings} from './controllers/get.js'; // get
+import {handleGetDecks, handleGetCards, handleGetDeckPracticeSettings} from './controllers/get.js';
 // post
 import handleRegister from './controllers/register.js';
 import handleSignIn from './controllers/signIn.js';
@@ -15,32 +15,34 @@ import { handleUpdateDeck, handleUpdateDeckSettings } from './controllers/update
 import { handleUpdateCard, handleUpdateCardScore } from './controllers/updateCard.js';
 // delete
 import { handleDeleteCard, handleDeleteDeck, handleDeleteUser } from './controllers/delete.js'
-
-import databaseInfo from './databaseInfo.js';
-const db = knex(databaseInfo);
-// const db = knex(
-//     {
-//       client: "pg",
-//       connection: {
-//         connectionString: process.env.DATABASE_URL,
-//         ssl: {
-//           rejectUnauthorized: false
-//         }
-//       },
-//     }
-// );
+// import databaseInfo from './databaseInfo.js'; // for development
 
 const app = express();
-// const PORT = process.env.PORT;
-const PORT = 3001;
-// const corsOptions = {
-//   origin: process.env.ORIGIN_URL,
-//   optionsSuccessStatus: 200
-// };
+
+// const db = knex(databaseInfo); // for development
+// const PORT = 3001; // for development
+// app.use(cors());  // for development
+
+
+const db = knex( // for production
+    {
+      client: "pg",
+      connection: {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false
+        }
+      },
+    }
+);
+const PORT = process.env.PORT; // for production
+const corsOptions = { // for production
+  origin: process.env.ORIGIN_URL,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions)); // for production
 
 app.use(express.json());
-// app.use(cors(corsOptions));
-app.use(cors());
 
 app.get("/", (req, res) => res.json("success"));
 app.get("/decks/:userId", (req, res) => {handleGetDecks(req, res, db)});
